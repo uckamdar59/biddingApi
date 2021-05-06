@@ -25,30 +25,35 @@ public class BiddingServiceImpl implements BiddingService{
 		// TODO Auto-generated method stub
 		BiddingData data = new BiddingData();
 		BidPostResponse response = new BidPostResponse();
-		  
-		data.setTransporterId(request.getTransporterId());
-		data.setLoadId(request.getLoadId());
-		data.setRate(request.getRate());
-		data.setTruckId(request.getTruckId());
-		data.setTransporterApproval(request.getTransporterApproval());
-		data.setShipperApproval(request.getShipperApproval());
-		data.setId("bid:"+UUID.randomUUID());
 		
-		if(data.getTransporterId()!=null)
+		if(request.getTransporterId()!=null&&request.getLoadId()!=null)
 		{
-			data.setTransporterApproval(true);
-		}
-		
-		if(data.getLoadId()!=null)
-		{
-			data.setShipperApproval(true);
-		}
-		
-		if(data.getLoadId()==null&&data.getTransporterId()==null)
-		{
-			 response.setStatus(constants.getULoadIdIsNullAndTransPorterIdIsNull());
+			 response.setStatus(constants.getPLoadIdAndTransporterIdAreNotNull());
 			 return response;
 		}
+		else if(request.getTransporterId()!=null)
+		{
+			data.setTransporterId(request.getTransporterId());
+			data.setTransporterApproval(true);
+			data.setShipperApproval(false);
+		}
+		else if(request.getLoadId()!=null)
+		{
+			data.setLoadId(request.getLoadId());
+			data.setShipperApproval(true);
+			data.setTransporterApproval(false);
+		}
+		else if(request.getTransporterId()==null&&request.getLoadId()==null)
+		{
+			 response.setStatus(constants.getPLoadIdAndTransPorterIdAreNull());
+			 return response;
+		}
+		
+	
+		data.setRate(request.getRate());
+		data.setTruckId(request.getTruckId());
+		data.setId("bid:"+UUID.randomUUID());
+		
 		
 		biddingDao.save(data);
 		
@@ -58,8 +63,12 @@ public class BiddingServiceImpl implements BiddingService{
 	}
 
 	@Override
-	public List<BiddingData> getBid() {
+	public List<BiddingData> getBid(String loadId) {
 		// TODO Auto-generated method stub
+		if(loadId!=null)
+		{
+			return biddingDao.findByLoadId(loadId);
+		}
 		return biddingDao.findAll();
 	
 	}
