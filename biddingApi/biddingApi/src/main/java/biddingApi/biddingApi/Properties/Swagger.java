@@ -21,6 +21,9 @@ public class Swagger {
 				
 	}
 	
+	//url: http://localhost:8080/v2/api-docs
+	//swaggerUI: http://localhost:8080/swagger-ui/
+	
 	private ApiInfo apiDetails(){
 		
 		return new ApiInfo(

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import biddingApi.biddingApi.Dao.BiddingDao;
 import biddingApi.biddingApi.Entities.BiddingData;
 import biddingApi.biddingApi.ErrorConstants.Constants;
+import biddingApi.biddingApi.Model.BidDeleteResponse;
 import biddingApi.biddingApi.Model.BidPostRequest;
 import biddingApi.biddingApi.Model.BidPostResponse;
 import biddingApi.biddingApi.Model.BidPutRequest;
@@ -93,10 +94,17 @@ public class BiddingServiceImpl implements BiddingService{
 	}
 
 	@Override
-	public void deleteBid(String id) {
+	public BidDeleteResponse deleteBid(String id) {
 		// TODO Auto-generated method stub
+		BidDeleteResponse response = new BidDeleteResponse();
 		if(biddingDao.findById(id).orElse(null)!=null)
+		{
 		biddingDao.deleteById(id);
+		response.setStatus(Constants.dSuccess);
+		return response;
+		}
+		response.setStatus(Constants.dDataNotExists);
+		return response;
 	}
 
 	@Override

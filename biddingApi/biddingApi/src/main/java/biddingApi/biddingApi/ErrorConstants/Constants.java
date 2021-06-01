@@ -15,4 +15,6 @@ public class Constants {
 	public static String uBothApproval = "Failed: Cannot update both Shipper and Transporter Approval";
 	public static String uTApprovalWhereTidIsNull = "Failed: Cannot update Transporter Approval where TransporterId is Null";
 	public static String uRateBothApprovalNull = "Failed: both Shipper or Transporter Approval cannot be null when rate is not Null";
+	public static String dSuccess = "bid-Account successfully deleted";
+	public static String dDataNotExists = "Failed: Data doesn't exists for given Id";
 }

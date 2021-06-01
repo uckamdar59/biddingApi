@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import biddingApi.biddingApi.Entities.BiddingData;
+import biddingApi.biddingApi.Model.BidDeleteResponse;
 import biddingApi.biddingApi.Model.BidPostRequest;
 import biddingApi.biddingApi.Model.BidPostResponse;
 import biddingApi.biddingApi.Model.BidPutRequest;
@@ -51,9 +52,9 @@ public class BiddingController {
 	}
 	
 	@DeleteMapping("/bid/{Id}")
-	public void deleteBid(@PathVariable String Id)
+	public BidDeleteResponse deleteBid(@PathVariable String Id)
 	{
-	biddingService.deleteBid(Id);
+	return biddingService.deleteBid(Id);
 	}
 	
 	
