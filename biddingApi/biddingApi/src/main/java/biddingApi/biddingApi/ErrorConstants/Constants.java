@@ -17,4 +17,5 @@ public class Constants {
 	public static String uRateBothApprovalNull = "Failed: both Shipper or Transporter Approval cannot be null when rate is not Null";
 	public static String dSuccess = "bid-Account successfully deleted";
 	public static String dDataNotExists = "Failed: Data doesn't exists for given Id";
+	public static String unitValueisNull = "Failed: unitValue cannot be null when rate is not Null";
 }
