@@ -47,6 +47,27 @@ public class BiddingServiceImpl implements BiddingService{
 				return response;
 			}
 			// Case: where transportId id null and LoadId is not Nulls
+			if(request.getRate()==null) {
+				response.setStatus(Constants.pTransporterRateIsNull);
+				return response;
+			}
+			if(request.getUnitValue()==null)
+			{
+				response.setStatus(Constants.unitValueisNull);
+				return response;
+			}
+			else
+			{
+				if("PER_TON".equals(String.valueOf(request.getUnitValue())))
+				{
+					//PER_TON, PER_TRUCK
+					data.setUnitValue(UnitValue.PER_TON);
+				}
+				else if("PER_TRUCK".equals(String.valueOf(request.getUnitValue())))
+				{
+					data.setUnitValue(UnitValue.PER_TRUCK);
+				}
+			}
 			data.setLoadId(request.getLoadId());
 			data.setShipperApproval(true);
 			data.setRate(request.getRate());
@@ -78,7 +99,6 @@ public class BiddingServiceImpl implements BiddingService{
 			}
 			data.setLoadId(request.getLoadId());
 			data.setRate(request.getRate());
-			//System.out.println("rv: " + request.getUnitValue());                   //////////////////////////////////////////////////
 			data.setTransporterApproval(true);
 			data.setShipperApproval(false);
 		}
