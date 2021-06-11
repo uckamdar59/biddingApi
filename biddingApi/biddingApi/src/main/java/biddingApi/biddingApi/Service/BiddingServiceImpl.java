@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import biddingApi.biddingApi.Dao.BiddingDao;
 import biddingApi.biddingApi.Entities.BiddingData;
+import biddingApi.biddingApi.Entities.BiddingData.UnitValue;
 import biddingApi.biddingApi.ErrorConstants.Constants;
 import biddingApi.biddingApi.Model.BidDeleteResponse;
 import biddingApi.biddingApi.Model.BidPostRequest;
@@ -46,6 +47,27 @@ public class BiddingServiceImpl implements BiddingService{
 				return response;
 			}
 			// Case: where transportId id null and LoadId is not Nulls
+			if(request.getRate()==null) {
+				response.setStatus(Constants.pTransporterRateIsNull);
+				return response;
+			}
+			if(request.getUnitValue()==null)
+			{
+				response.setStatus(Constants.unitValueisNull);
+				return response;
+			}
+			else
+			{
+				if("PER_TON".equals(String.valueOf(request.getUnitValue())))
+				{
+					//PER_TON, PER_TRUCK
+					data.setUnitValue(UnitValue.PER_TON);
+				}
+				else if("PER_TRUCK".equals(String.valueOf(request.getUnitValue())))
+				{
+					data.setUnitValue(UnitValue.PER_TRUCK);
+				}
+			}
 			data.setLoadId(request.getLoadId());
 			data.setShipperApproval(true);
 			data.setRate(request.getRate());
@@ -57,6 +79,23 @@ public class BiddingServiceImpl implements BiddingService{
 			if(request.getRate()==null) {
 				response.setStatus(Constants.pTransporterRateIsNull);
 				return response;
+			}
+			if(request.getUnitValue()==null)
+			{
+				response.setStatus(Constants.unitValueisNull);
+				return response;
+			}
+			else
+			{
+				if("PER_TON".equals(String.valueOf(request.getUnitValue())))
+				{
+					//PER_TON, PER_TRUCK
+					data.setUnitValue(UnitValue.PER_TON);
+				}
+				else if("PER_TRUCK".equals(String.valueOf(request.getUnitValue())))
+				{
+					data.setUnitValue(UnitValue.PER_TRUCK);
+				}
 			}
 			data.setLoadId(request.getLoadId());
 			data.setRate(request.getRate());
@@ -182,6 +221,19 @@ public class BiddingServiceImpl implements BiddingService{
 		
 		if(bidPutRequest.getTransporterApproval()!=null&&bidPutRequest.getTransporterApproval()==false) {
 			dataById.setTransporterApproval(false);
+		}
+		
+		if(bidPutRequest.getUnitValue()!=null)
+		{
+			if("PER_TON".equals(String.valueOf(bidPutRequest.getUnitValue())))                /////////////////////////////////////////////
+			{
+				//PER_TON, PER_TRUCK
+				dataById.setUnitValue(UnitValue.PER_TON);
+			}
+			else if("PER_TRUCK".equals(String.valueOf(bidPutRequest.getUnitValue())))
+			{
+				dataById.setUnitValue(UnitValue.PER_TRUCK);
+			}
 		}
 
 		
