@@ -249,19 +249,16 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingGET",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingGET",
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "401": {
@@ -279,22 +276,19 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingHEAD",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingHEAD",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "204": {
@@ -312,22 +306,19 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingPOST",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "201": {
@@ -348,22 +339,19 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingPUT",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "201": {
@@ -384,19 +372,16 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingDELETE",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingDELETE",
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "204": {
@@ -414,22 +399,19 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingOPTIONS",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingOPTIONS",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "204": {
@@ -447,22 +429,19 @@
                 "tags": [
                     "basic-error-controller"
                 ],
-                "summary": "error",
-                "operationId": "errorUsingPATCH",
+                "summary": "errorHtml",
+                "operationId": "errorHtmlUsingPATCH",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "*/*"
+                    "text/html"
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "object"
-                            }
+                            "$ref": "#/definitions/ModelAndView"
                         }
                     },
                     "204": {
@@ -506,6 +485,13 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "unitValue": {
+                    "type": "string",
+                    "enum": [
+                        "PER_TON",
+                        "PER_TRUCK"
+                    ]
                 }
             },
             "title": "BidPostRequest"
@@ -537,6 +523,13 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "unitValue": {
+                    "type": "string",
+                    "enum": [
+                        "PER_TON",
+                        "PER_TRUCK"
+                    ]
                 }
             },
             "title": "BidPutRequest"
@@ -577,6 +570,13 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "unitValue": {
+                    "type": "string",
+                    "enum": [
+                        "PER_TON",
+                        "PER_TRUCK"
+                    ]
                 }
             },
             "title": "BiddingData"
