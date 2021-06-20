@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import biddingApi.biddingApi.Dao.BiddingDao;
 import biddingApi.biddingApi.Entities.BiddingData;
-import biddingApi.biddingApi.Entities.BiddingData.UnitValue;
 import biddingApi.biddingApi.ErrorConstants.Constants;
 import biddingApi.biddingApi.Model.BidDeleteResponse;
 import biddingApi.biddingApi.Model.BidPostRequest;
@@ -20,115 +19,95 @@ import biddingApi.biddingApi.Model.BidPutRequest;
 import biddingApi.biddingApi.Model.BidPutResponse;
 
 @Service
-public class BiddingServiceImpl implements BiddingService{
+public class BiddingServiceImpl implements BiddingService {
 
 	@Autowired
 	private BiddingDao biddingDao;
-	
+
 	@Override
 	public BidPostResponse addBid(BidPostRequest request) {
-		// TODO Auto-generated method stub
+
 		BiddingData data = new BiddingData();
 		BidPostResponse response = new BidPostResponse();
-		
-		if(request.getTransporterId()==null&&request.getLoadId()==null){
-			//Case: where both LoadId and TransporterIs are Null
-			 response.setStatus(Constants.pLoadIdAndTransPorterIdAreNull);
-			 return response;
-		}else if(request.getLoadId()==null){
-			// Case: where LoadIs Null
-			 response.setStatus(Constants.pLoadIdIsNull);
-			 return response;
-		}else if(request.getTransporterId()==null){
-			// Case: where at least one bid exists where it contains the same loadId
-			List<BiddingData> temp = biddingDao.findByLoadId(request.getLoadId());
-			if(temp.size()!=0){
-				response.setStatus(Constants.pBidExists);
-				return response;
-			}
-			// Case: where transportId id null and LoadId is not Nulls
-			if(request.getRate()==null) {
-				response.setStatus(Constants.pTransporterRateIsNull);
-				return response;
-			}
-			if(request.getUnitValue()==null)
-			{
-				response.setStatus(Constants.unitValueisNull);
-				return response;
-			}
-			else
-			{
-				if("PER_TON".equals(String.valueOf(request.getUnitValue())))
-				{
-					//PER_TON, PER_TRUCK
-					data.setUnitValue(UnitValue.PER_TON);
-				}
-				else if("PER_TRUCK".equals(String.valueOf(request.getUnitValue())))
-				{
-					data.setUnitValue(UnitValue.PER_TRUCK);
-				}
-			}
-			data.setLoadId(request.getLoadId());
-			data.setShipperApproval(true);
-			data.setRate(request.getRate());
-		}else {
-			// Case: Bid where tranposrterId is not Null and LoadId is not Null
-			data.setTransporterId(request.getTransporterId());
-			data.setTruckId(request.getTruckId());
-			//Case: checking Rate is provided or not, Rate should be provided in this case
-			if(request.getRate()==null) {
-				response.setStatus(Constants.pTransporterRateIsNull);
-				return response;
-			}
-			if(request.getUnitValue()==null)
-			{
-				response.setStatus(Constants.unitValueisNull);
-				return response;
-			}
-			else
-			{
-				if("PER_TON".equals(String.valueOf(request.getUnitValue())))
-				{
-					//PER_TON, PER_TRUCK
-					data.setUnitValue(UnitValue.PER_TON);
-				}
-				else if("PER_TRUCK".equals(String.valueOf(request.getUnitValue())))
-				{
-					data.setUnitValue(UnitValue.PER_TRUCK);
-				}
-			}
-			data.setLoadId(request.getLoadId());
-			data.setRate(request.getRate());
-			data.setTransporterApproval(true);
-			data.setShipperApproval(false);
+
+		if (request.getTransporterId() == null) {
+			response.setStatus(Constants.TRANSPORTER_ID_NULL);
+			return response;
+
 		}
-		
-		data.setId("bid:"+UUID.randomUUID());
-		// handeling unique constraint exception
+
+		if (request.getLoadId() == null) {
+			response.setStatus(Constants.pLoadIdIsNull);
+			return response;
+		}
+
+		if (request.getRate() == null) {
+			response.setStatus(Constants.pTransporterRateIsNull);
+			return response;
+		}
+
+		if (request.getUnitValue() == null) {
+			response.setStatus(Constants.unitValueisNull);
+			return response;
+		}
+
+		String id = "bid:" + UUID.randomUUID();
+
+		data.setBidId(id);
+
+		data.setTransporterId(request.getTransporterId());
+		data.setLoadId(request.getLoadId());
+		data.setRate(request.getRate());
+		if ("PER_TON".equals(String.valueOf(request.getUnitValue())))
+			data.setUnitValue(BiddingData.UnitValue.PER_TON);
+		else
+			data.setUnitValue(BiddingData.UnitValue.PER_TRUCK);
+
+		if (request.getBiddingDate() != null) {
+			data.setBiddingDate(request.getBiddingDate());
+		}
+
+		if (request.getTruckId() != null) {
+			data.setTruckId(request.getTruckId());
+		}
+
+		data.setTransporterApproval(true);
+		data.setShipperApproval(false);
+
 		try {
-		    biddingDao.save(data);
-		}catch(DataIntegrityViolationException e){
+			biddingDao.save(data);
+		} catch (DataIntegrityViolationException e) {
 			response.setStatus(Constants.pLoadIdAndTransporterIdExists);
 			return response;
-		}catch(Exception e){
+		} catch (Exception e) {
 			response.setStatus(Constants.dataSavingExcetion);
 			return response;
 		}
-        response.setStatus(Constants.success);
+
+		response.setStatus(Constants.success);
+		response.setBidId(id);
+		response.setLoadId(data.getLoadId());
+		response.setRate(data.getRate());
+		response.setTransporterId(data.getTransporterId());
+		response.setShipperApproval(data.getShipperApproval());
+		response.setTransporterApproval(data.getTransporterApproval());
+		response.setTruckId(data.getTruckId());
+		response.setUnitValue(data.getUnitValue());
+		response.setBiddingDate(data.getBiddingDate());
+
 		return response;
 	}
 
 	@Override
-	public List<BiddingData> getBid(Integer pageNo,String loadId) {
+	public List<BiddingData> getBid(Integer pageNo, String loadId) {
 		// TODO Auto-generated method stub
-		if(pageNo==null)
-			pageNo=0;
-		if(loadId!=null){
-			Pageable p = PageRequest.of(pageNo,2);
-			return biddingDao.findByLoadId(loadId,p);
-		}else {
-			Pageable p = PageRequest.of(pageNo,2);
-			return biddingDao.findAll(p).getContent();
+		if (pageNo == null)
+			pageNo = 0;
+		if (loadId != null) {
+			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+			return biddingDao.findByLoadId(loadId, p);
+		} else {
+			return biddingDao.findAll();
 		}
 	}
 
@@ -136,11 +115,10 @@ public class BiddingServiceImpl implements BiddingService{
 	public BidDeleteResponse deleteBid(String id) {
 		// TODO Auto-generated method stub
 		BidDeleteResponse response = new BidDeleteResponse();
-		if(biddingDao.findById(id).orElse(null)!=null)
-		{
-		biddingDao.deleteById(id);
-		response.setStatus(Constants.dSuccess);
-		return response;
+		if (biddingDao.findById(id).orElse(null) != null) {
+			biddingDao.deleteById(id);
+			response.setStatus(Constants.dSuccess);
+			return response;
 		}
 		response.setStatus(Constants.dDataNotExists);
 		return response;
@@ -148,98 +126,141 @@ public class BiddingServiceImpl implements BiddingService{
 
 	@Override
 	public BiddingData getBidById(String id) {
-		// TODO Auto-generated method stub
 		return biddingDao.findById(id).orElse(null);
 	}
 
 	@Override
 	public BidPutResponse updateBid(String id, BidPutRequest bidPutRequest) {
-		// TODO Auto-generated method stub
+
 		BidPutResponse response = new BidPutResponse();
-		BiddingData dataById = biddingDao.findById(id).orElse(null);
-		
-		if(dataById==null){
+		BiddingData data = biddingDao.findById(id).orElse(null);
+
+		if (data == null) {
 			response.setStatus(Constants.uDataNotExists);
 			return response;
 		}
-		
-		
-		if(bidPutRequest.getShipperApproval()!=null&&bidPutRequest.getTransporterApproval()!=null){
-			response.setStatus(Constants.uBothApproval);
-			return response;
-		}
-		
-		if(dataById.getTransporterId()==null&&bidPutRequest.getTransporterApproval()!=null) {
-			response.setStatus(Constants.uTApprovalWhereTidIsNull);
-			return response;
-		}
-		
-		if(dataById.getTransporterApproval()==null&&bidPutRequest.getTruckId()!=null){
-    		response.setStatus(Constants.uTransportIdIsNullTruckUpdate);
-    		return response;
-    	}else if(bidPutRequest.getShipperApproval()!=null&&bidPutRequest.getTruckId()!=null){
-    		response.setStatus(Constants.uShipperIdNotNullTruckUpdate);
-    		return response;
-    	}else if(bidPutRequest.getTruckId()!=null){
-    		dataById.setTruckId(bidPutRequest.getTruckId());
-    	}
-		
-		
-		if(bidPutRequest.getRate()==null&&bidPutRequest.getShipperApproval()!=null){
-			dataById.setShipperApproval(true);
-		}else if(bidPutRequest.getRate()==null&&bidPutRequest.getTransporterApproval()!=null){
-			if(dataById.getTransporterId()!=null)
-			dataById.setTransporterApproval(true);
-		}
-	
-		
-		if(bidPutRequest.getRate()!=null&&(bidPutRequest.getShipperApproval()==null)&&(bidPutRequest.getTransporterApproval()==null)) {
-			response.setStatus(Constants.uRateBothApprovalNull);
-			return response;
-		}else if((bidPutRequest.getRate()!=null)&&(bidPutRequest.getShipperApproval()!=null)) {
-			if(bidPutRequest.getRate()==dataById.getRate()) {
-				dataById.setShipperApproval(true);
-			}else {
-				dataById.setRate(bidPutRequest.getRate());
-				dataById.setShipperApproval(true);
-				if(dataById.getTransporterId()!=null)
-				dataById.setTransporterApproval(false);
+
+		if (String.valueOf(bidPutRequest.getTransporterApproval()).equals("true")
+				&& String.valueOf(bidPutRequest.getShipperApproval()).equals("null")) {
+			if (bidPutRequest.getRate() != null) {
+
+				if (bidPutRequest.getUnitValue() == null) {
+					response.setStatus(Constants.unitValueisNull);
+					return response;
+				} else {
+					data.setUnitValue(bidPutRequest.getUnitValue());
+					data.setRate(bidPutRequest.getRate());
+					if (bidPutRequest.getBiddingDate() != null) {
+						data.setBiddingDate(bidPutRequest.getBiddingDate());
+					}
+
+					if (bidPutRequest.getTruckId() != null) {
+						data.setTruckId(bidPutRequest.getTruckId());
+					}
+
+					data.setTransporterApproval(true);
+					data.setShipperApproval(false);
+
+					biddingDao.save(data);
+
+					response.setStatus(Constants.uSuccess);
+					response.setBidId(id);
+					response.setLoadId(data.getLoadId());
+					response.setRate(data.getRate());
+					response.setTransporterId(data.getTransporterId());
+					response.setShipperApproval(data.getShipperApproval());
+					response.setTransporterApproval(data.getTransporterApproval());
+					response.setTruckId(data.getTruckId());
+					response.setUnitValue(data.getUnitValue());
+					response.setBiddingDate(data.getBiddingDate());
+
+					return response;
+				}
+
+				// accept by transporter
+			} else if (bidPutRequest.getRate() == null && data.getShipperApproval() == true) {
+
+				data.setTransporterApproval(true);
+
+				biddingDao.save(data);
+
+				response.setStatus(Constants.uSuccess);
+				response.setBidId(id);
+				response.setLoadId(data.getLoadId());
+				response.setRate(data.getRate());
+				response.setTransporterId(data.getTransporterId());
+				response.setShipperApproval(data.getShipperApproval());
+				response.setTransporterApproval(data.getTransporterApproval());
+				response.setTruckId(data.getTruckId());
+				response.setUnitValue(data.getUnitValue());
+				response.setBiddingDate(data.getBiddingDate());
+
+				return response;
+
 			}
-		}else if((bidPutRequest.getRate()!=null)&&(bidPutRequest.getTransporterApproval()!=null)) {
-			if(bidPutRequest.getRate()==dataById.getRate()) {
-				dataById.setTransporterApproval(true);;
-			}else {
-				dataById.setRate(bidPutRequest.getRate());
-				dataById.setTransporterApproval(true);
-				dataById.setShipperApproval(false);
+
+		} // update from shipper
+		else if (String.valueOf(bidPutRequest.getShipperApproval()).equals("true")
+				&& String.valueOf(bidPutRequest.getTransporterApproval()).equals("null")) {
+
+			if (bidPutRequest.getRate() != null) {
+				if (bidPutRequest.getUnitValue() == null) {
+					response.setStatus(Constants.unitValueisNull);
+					return response;
+				} else {
+					data.setUnitValue(bidPutRequest.getUnitValue());
+					data.setRate(bidPutRequest.getRate());
+					if (bidPutRequest.getBiddingDate() != null) {
+						data.setBiddingDate(bidPutRequest.getBiddingDate());
+					}
+
+					if (bidPutRequest.getTruckId() != null) {
+						data.setTruckId(bidPutRequest.getTruckId());
+					}
+
+					data.setShipperApproval(true);
+					data.setTransporterApproval(false);
+
+					biddingDao.save(data);
+
+					response.setStatus(Constants.uSuccess);
+					response.setBidId(id);
+					response.setLoadId(data.getLoadId());
+					response.setRate(data.getRate());
+					response.setTransporterId(data.getTransporterId());
+					response.setShipperApproval(data.getShipperApproval());
+					response.setTransporterApproval(data.getTransporterApproval());
+					response.setTruckId(data.getTruckId());
+					response.setUnitValue(data.getUnitValue());
+					response.setBiddingDate(data.getBiddingDate());
+
+					return response;
+				}
+				// accept by shipper
+			} else if (bidPutRequest.getRate() == null && data.getTransporterApproval() == true) {
+
+				data.setShipperApproval(true);
+
+				biddingDao.save(data);
+
+				response.setStatus(Constants.uSuccess);
+				response.setBidId(id);
+				response.setLoadId(data.getLoadId());
+				response.setRate(data.getRate());
+				response.setTransporterId(data.getTransporterId());
+				response.setShipperApproval(data.getShipperApproval());
+				response.setTransporterApproval(data.getTransporterApproval());
+				response.setTruckId(data.getTruckId());
+				response.setUnitValue(data.getUnitValue());
+				response.setBiddingDate(data.getBiddingDate());
+
+				return response;
+
 			}
-		}
-		
-		if(bidPutRequest.getShipperApproval()!=null&&bidPutRequest.getShipperApproval()==false){
-			dataById.setShipperApproval(false);
-		}
-		
-		if(bidPutRequest.getTransporterApproval()!=null&&bidPutRequest.getTransporterApproval()==false) {
-			dataById.setTransporterApproval(false);
-		}
-		
-		if(bidPutRequest.getUnitValue()!=null)
-		{
-			if("PER_TON".equals(String.valueOf(bidPutRequest.getUnitValue())))                /////////////////////////////////////////////
-			{
-				//PER_TON, PER_TRUCK
-				dataById.setUnitValue(UnitValue.PER_TON);
-			}
-			else if("PER_TRUCK".equals(String.valueOf(bidPutRequest.getUnitValue())))
-			{
-				dataById.setUnitValue(UnitValue.PER_TRUCK);
-			}
+
 		}
 
-		
-		biddingDao.save(dataById);
-		response.setStatus(Constants.success);
 		return response;
-	}
 
+	}
 }

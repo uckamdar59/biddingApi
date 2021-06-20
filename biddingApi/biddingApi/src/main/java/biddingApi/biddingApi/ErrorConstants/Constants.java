@@ -15,7 +15,30 @@ public class Constants {
 	public static String uBothApproval = "Failed: Cannot update both Shipper and Transporter Approval";
 	public static String uTApprovalWhereTidIsNull = "Failed: Cannot update Transporter Approval where TransporterId is Null";
 	public static String uRateBothApprovalNull = "Failed: both Shipper or Transporter Approval cannot be null when rate is not Null";
+	public static String uSuccess = "Updated Succcessfully";
 	public static String dSuccess = "bid-Account successfully deleted";
 	public static String dDataNotExists = "Failed: Data doesn't exists for given Id";
 	public static String unitValueisNull = "Failed: unitValue cannot be null when rate is not Null";
+	public static String TRANSPORTER_ID_NULL = "Failed: TransporterId is null";
+	public static String RATE_NULL = "Failed: Rate is null";
+
+	
+	
+	//bidding data
+	public static String ID = "bid:12345";
+	public static String TRANSPORTER_ID = "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb67";
+	public static String URI = "/bid";
+	public static String BID_ID_URI = "/bid/bid:12345";
+	public static String LOAD_ID = "load:123";
+	
+	
+	public static String BASE_URI = "http://localhost:8080/bid";
+	
+	
+	
+	public static final long pageSize = 15;
+	
+	
+	
+	
 }

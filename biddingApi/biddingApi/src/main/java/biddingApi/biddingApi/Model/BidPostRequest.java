@@ -5,20 +5,18 @@ import java.util.List;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import biddingApi.biddingApi.Entities.BiddingData.UnitValue;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
+@NoArgsConstructor
+@AllArgsConstructor
 public @Data class BidPostRequest {
 
 	private String transporterId;
-	private Long rate;
 	private String loadId;
-	private List<String> truckId;
-	
-	@Enumerated(EnumType.STRING)
+	private Long rate;
 	private UnitValue unitValue;
-
-	public enum UnitValue{
-		PER_TON, PER_TRUCK
-	}
-
+	private List<String> truckId;
+	private String biddingDate;
 }
