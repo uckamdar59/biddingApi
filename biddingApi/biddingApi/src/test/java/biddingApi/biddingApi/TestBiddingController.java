@@ -113,7 +113,7 @@ class TestBiddingController {
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
-		when(biddingService.getBid(0, Constants.LOAD_ID,null)).thenReturn(listBiddingData.subList(2, 4));
+		when(biddingService.getBid(0, Constants.LOAD_ID, null)).thenReturn(listBiddingData.subList(2, 4));
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(Constants.URI)
 				.queryParam("loadId", Constants.LOAD_ID).queryParam("pageNo", String.valueOf(0))
@@ -196,17 +196,7 @@ class TestBiddingController {
 						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
 				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63", "load:123", null,
 						BiddingData.Unit.PER_TON, Arrays.asList("truck:123", "truck:456"), false, true, null)
-//				new BiddingData("id1", null, "AP 32 AD 2226", true, null, (long) 0, null, null, null, null),
-//				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, true, null, (long) 0,
-//						null, null, null, null),
-//				new BiddingData("id3", Constants.TRANSPORTER_ID, "AP 32 AD 2220", true, null, (long) 0, null, null,
-//						null, null),
-//				new BiddingData("id4", Constants.TRANSPORTER_ID, "Ap32ad2219", true, null, (long) 0, null, null,
-//						null, null),
-//				new BiddingData("id5", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb68", "A32ad2219", false, null,
-//						(long) 0, null, null, (long) 30, null),
-//				new BiddingData("id6", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb68", "Ap32ad221", false, null,
-//						(long) 0, null, null, (long) 40, null)
+
 		);
 
 		return biddingList;
