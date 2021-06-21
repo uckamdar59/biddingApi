@@ -10,30 +10,39 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import lombok.Data;
 
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"transporterId" , "loadId"})})
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "transporterId", "loadId" }) })
 @Entity
 public @Data class BiddingData {
 
 	@Id
-	private String id;
-	
-	@Column(name="transporterId")
+	private String bidId;
+
+	@Column(name = "transporterId")
 	private String transporterId;
-	@Column(name="loadId")
+	@Column(name = "loadId")
 	private String loadId;
 	private Long rate;
 	@Enumerated(EnumType.STRING)
-	private UnitValue unitValue;
+	public Unit unitValue;
 
-	public enum UnitValue{
+	public enum Unit {
 		PER_TON, PER_TRUCK
 	}
-	
-	@Column(name="truckId")
-	@ElementCollection(targetClass=String.class)
+
+	@Column(name = "truckId")
+	@ElementCollection(targetClass = String.class)
 	private List<String> truckId;
+
 	private Boolean transporterApproval;
 	private Boolean shipperApproval;
+
+	private String biddingDate;
+
 }
