@@ -25,37 +25,32 @@ public class BiddingController {
 
 	@Autowired
 	private BiddingService biddingService;
-	
+
 	@GetMapping("/bid")
-	public List<BiddingData> getBid(@RequestParam(value="pageNo",required=false) Integer pageNo,@RequestParam(value="loadId",required=false) String loadId)
-	{
-		return biddingService.getBid(pageNo,loadId);
+	public List<BiddingData> getBid(@RequestParam(value = "pageNo", required = false) Integer pageNo,
+			@RequestParam(value = "loadId", required = false) String loadId,
+			@RequestParam(value = "transporterId", required = false) String transporterId) {
+		return biddingService.getBid(pageNo, loadId,transporterId);
 	}
-	
+
 	@GetMapping("/bid/{Id}")
-	public BiddingData getBidById(@PathVariable String Id)
-	{
+	public BiddingData getBidById(@PathVariable String Id) {
 		return biddingService.getBidById(Id);
 	}
-	
-	
+
 	@PostMapping("/bid")
-	public BidPostResponse addBid(@RequestBody BidPostRequest bidPostRequest)
-	{
+	public BidPostResponse addBid(@RequestBody BidPostRequest bidPostRequest) {
 		return biddingService.addBid(bidPostRequest);
 	}
-	
+
 	@PutMapping("/bid/{id}")
-	public BidPutResponse updateBid(@PathVariable String id,@RequestBody BidPutRequest bidPutRequest)
-	{
-		return biddingService.updateBid(id,bidPutRequest);
+	public BidPutResponse updateBid(@PathVariable String id, @RequestBody BidPutRequest bidPutRequest) {
+		return biddingService.updateBid(id, bidPutRequest);
 	}
-	
+
 	@DeleteMapping("/bid/{Id}")
-	public BidDeleteResponse deleteBid(@PathVariable String Id)
-	{
-	return biddingService.deleteBid(Id);
+	public BidDeleteResponse deleteBid(@PathVariable String Id) {
+		return biddingService.deleteBid(Id);
 	}
-	
-	
+
 }

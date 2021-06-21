@@ -59,9 +59,9 @@ public class BiddingServiceImpl implements BiddingService {
 		data.setLoadId(request.getLoadId());
 		data.setRate(request.getRate());
 		if ("PER_TON".equals(String.valueOf(request.getUnitValue())))
-			data.setUnitValue(BiddingData.UnitValue.PER_TON);
+			data.setUnitValue(BiddingData.Unit.PER_TON);
 		else
-			data.setUnitValue(BiddingData.UnitValue.PER_TRUCK);
+			data.setUnitValue(BiddingData.Unit.PER_TRUCK);
 
 		if (request.getBiddingDate() != null) {
 			data.setBiddingDate(request.getBiddingDate());
@@ -99,13 +99,19 @@ public class BiddingServiceImpl implements BiddingService {
 	}
 
 	@Override
-	public List<BiddingData> getBid(Integer pageNo, String loadId) {
+	public List<BiddingData> getBid(Integer pageNo, String loadId, String transporterId) {
 		// TODO Auto-generated method stub
 		if (pageNo == null)
 			pageNo = 0;
-		if (loadId != null) {
+		if (loadId != null && transporterId == null) {
 			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
 			return biddingDao.findByLoadId(loadId, p);
+		} else if (loadId == null && transporterId != null) {
+			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+			return biddingDao.findByTransporterId(transporterId, p);
+		} else if (loadId != null && transporterId != null) {
+			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+			return biddingDao.findByLoadIdAndTransporterId(loadId, transporterId, p);
 		} else {
 			return biddingDao.findAll();
 		}
@@ -215,9 +221,9 @@ public class BiddingServiceImpl implements BiddingService {
 					}
 
 					if (bidPutRequest.getTruckId() != null) {
-						data.setTruckId(bidPutRequest.getTruckId());
+						response.setStatus(Constants.TRUCK_ID_UPDATE_BY_SHIPPER);
+						return response;
 					}
-
 					data.setShipperApproval(true);
 					data.setTransporterApproval(false);
 
@@ -257,6 +263,20 @@ public class BiddingServiceImpl implements BiddingService {
 				return response;
 
 			}
+
+		} else if (String.valueOf(bidPutRequest.getShipperApproval()).equals("null")
+				&& String.valueOf(bidPutRequest.getTransporterApproval()).equals("null")) {
+
+			response.setStatus(Constants.TRANSPORTER_SHIPPER_APPROVAL_NULL);
+
+			return response;
+
+		}else if (!String.valueOf(bidPutRequest.getShipperApproval()).equals("null")
+				&& !String.valueOf(bidPutRequest.getTransporterApproval()).equals("null")) {
+
+			response.setStatus(Constants.TRANSPORTER_SHIPPER_APPROVAL_NOT_NULL);
+
+			return response;
 
 		}
 

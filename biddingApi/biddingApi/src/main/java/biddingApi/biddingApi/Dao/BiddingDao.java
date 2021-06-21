@@ -9,10 +9,16 @@ import org.springframework.stereotype.Repository;
 import biddingApi.biddingApi.Entities.BiddingData;
 
 @Repository
-public interface BiddingDao extends JpaRepository<BiddingData,String>{
+public interface BiddingDao extends JpaRepository<BiddingData, String> {
 
 	public List<BiddingData> findByLoadId(String loadId);
-    public BiddingData findByLoadIdAndTransporterId(String loadId,String transporterId);
+
+	public BiddingData findByLoadIdAndTransporterId(String loadId, String transporterId);
+
 	public List<BiddingData> findByLoadId(String loadId, Pageable p);
-		
+
+	public List<BiddingData> findByTransporterId(String transporterId, Pageable p);
+
+	public List<BiddingData> findByLoadIdAndTransporterId(String loadId, String transporterId, Pageable p);
+
 }

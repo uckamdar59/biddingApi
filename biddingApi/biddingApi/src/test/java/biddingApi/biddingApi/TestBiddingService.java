@@ -34,22 +34,19 @@ public class TestBiddingService {
 	@MockBean
 	private BiddingDao biddingDao;
 
-	
-
 	@Test
 	public void addDataSuccess() {
 
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				"load:123", (long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
-		
 		when(biddingDao.save(listBiddingData.get(0))).thenReturn(listBiddingData.get(0));
 
-		
-		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success,Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null);
+		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success, Constants.ID,
+				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
+				Arrays.asList("truck:123"), false, true, null);
 
 		assertEquals(bidPostResponse.getStatus(), biddingService.addBid(bidPostRequest).getStatus());
 
@@ -74,15 +71,15 @@ public class TestBiddingService {
 	@Test
 	public void addDataFailed_invalidLoadId_null() {
 
-		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				null, (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null,
+				(long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.save(listBiddingData.get(2))).thenReturn(listBiddingData.get(2));
 
-		BidPostResponse response = new BidPostResponse(Constants.pLoadIdIsNull, null, null, null,
-				null, null, null, null, null, null);
+		BidPostResponse response = new BidPostResponse(Constants.pLoadIdIsNull, null, null, null, null, null, null,
+				null, null, null);
 
 		assertEquals(response, biddingService.addBid(bidPostRequest));
 
@@ -91,50 +88,47 @@ public class TestBiddingService {
 	@Test
 	public void addDataFailed_invalidRate_null() {
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-			"load:1345", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				"load:1345", null, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.save(listBiddingData.get(2))).thenReturn(listBiddingData.get(2));
-		
-		
 
-		BidPostResponse response = new BidPostResponse(Constants.pTransporterRateIsNull, null, null, null,
-				null, null, null, null, null, null);
+		BidPostResponse response = new BidPostResponse(Constants.pTransporterRateIsNull, null, null, null, null, null,
+				null, null, null, null);
 
 		assertEquals(response, biddingService.addBid(bidPostRequest));
 	}
-	
+
 	@Test
 	public void addDataFailed_invalidUnitValue_null() {
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-			"load:1345", (long)23, null, Arrays.asList("truck:123"), null);
+				"load:1345", (long) 23, null, Arrays.asList("truck:123"), null);
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.save(listBiddingData.get(2))).thenReturn(listBiddingData.get(2));
 
-		BidPostResponse response = new BidPostResponse(Constants.unitValueisNull, null, null, null,
-				null, null, null, null, null, null);
+		BidPostResponse response = new BidPostResponse(Constants.unitValueisNull, null, null, null, null, null, null,
+				null, null, null);
 
 		assertEquals(response, biddingService.addBid(bidPostRequest));
 	}
-	
+
 	@Test
 	public void addDataFailed_invalidUnitValue_null_Rate_null() {
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-			"load:1345", null, null, Arrays.asList("truck:123"), null);
+				"load:1345", null, null, Arrays.asList("truck:123"), null);
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.save(listBiddingData.get(2))).thenReturn(listBiddingData.get(2));
 
-		BidPostResponse response = new BidPostResponse(Constants.pTransporterRateIsNull, null, null, null,
-				null, null, null, null, null, null);
+		BidPostResponse response = new BidPostResponse(Constants.pTransporterRateIsNull, null, null, null, null, null,
+				null, null, null, null);
 
 		assertEquals(response, biddingService.addBid(bidPostRequest));
 	}
-
 
 	@Test
 	public void getBiddingDataWithIdSuccess() {
@@ -142,7 +136,7 @@ public class TestBiddingService {
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
-		
+
 //		
 		assertEquals(listBiddingData.get(0), biddingService.getBidById(Constants.ID));
 
@@ -154,14 +148,14 @@ public class TestBiddingService {
 		List<BiddingData> listBiddingData = createBiddingData();
 
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
-		
-		BidPutRequest bidPutRequest = new BidPutRequest( (long) 1000,BiddingData.UnitValue.PER_TRUCK,
+
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK,
 				Arrays.asList("truck:abc"), null, false, null);
 
-		BidPutResponse response = new BidPutResponse(Constants.uSuccess, Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null, false, null);
+		BidPutResponse response = new BidPutResponse(Constants.uSuccess, Constants.ID,
+				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
+				Arrays.asList("truck:123"), null, false, null);
 
- 
 	}
 
 	@Test
@@ -173,12 +167,11 @@ public class TestBiddingService {
 
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
 
-		BidPutRequest bidPutRequest = new BidPutRequest( (long) 1000,BiddingData.UnitValue.PER_TRUCK,
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK,
 				Arrays.asList("truck:abc"), true, false, wrongBidId);
 
-
-		BidPutResponse response = new BidPutResponse(Constants.uDataNotExists, null, null, null,
-				null, null, null, null, null, null);
+		BidPutResponse response = new BidPutResponse(Constants.uDataNotExists, null, null, null, null, null, null, null,
+				null, null);
 
 		assertEquals(response, biddingService.updateBid(wrongBidId, bidPutRequest));
 
@@ -196,13 +189,10 @@ public class TestBiddingService {
 		currentPage = PageRequest.of(0, (int) Constants.pageSize);
 
 		when(biddingDao.findByLoadId(Constants.LOAD_ID, currentPage)).thenReturn(listBiddingData.subList(2, 4));
-		
-		assertEquals(listBiddingData.subList(2, 4),
-				biddingService.getBid(pageNo, Constants.LOAD_ID));
+
+		assertEquals(listBiddingData.subList(2, 4), biddingService.getBid(pageNo, Constants.LOAD_ID,null));
 
 	}
-
-
 
 	@Test
 	public void deleteDataSuccess() {
@@ -211,7 +201,6 @@ public class TestBiddingService {
 
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
 
-		
 		BidDeleteResponse response = new BidDeleteResponse(Constants.dSuccess);
 
 		assertEquals(response, biddingService.deleteBid(Constants.ID));
@@ -229,20 +218,20 @@ public class TestBiddingService {
 
 		BidDeleteResponse response = new BidDeleteResponse(Constants.dDataNotExists);
 
-		assertEquals(response, biddingService.deleteBid(wrongBidId ));
+		assertEquals(response, biddingService.deleteBid(wrongBidId));
 
 	}
 
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
-				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						"load:1234", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						null, (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61",
-						"load:123", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id3", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63",
-						"load:123", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123","truck:456"), false, true, null)
+				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:1234",
+						(long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, (long) 20,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", "load:123", null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id3", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63", "load:123", null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123", "truck:456"), false, true, null)
 //				new BiddingData("id1", null, "AP 32 AD 2226", true, null, (long) 0, null, null, null, null),
 //				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, true, null, (long) 0,
 //						null, null, null, null),
@@ -254,10 +243,9 @@ public class TestBiddingService {
 //						(long) 0, null, null, (long) 30, null),
 //				new BiddingData("id6", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb68", "Ap32ad221", false, null,
 //						(long) 0, null, null, (long) 40, null)
-				);
+		);
 
 		return biddingList;
 	}
-
 
 }

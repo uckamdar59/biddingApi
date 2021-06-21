@@ -61,8 +61,7 @@ public class TestBiddingDao {
 		assertThat(list.size()).isEqualTo(2);
 
 	}
-	
-	
+
 	@Test
 	public void testFindByLoadIdWithPagination() {
 
@@ -157,7 +156,7 @@ public class TestBiddingDao {
 		// entityManager.persist(truckData);
 		Optional<BiddingData> getFromDb = biddingDao.findById(Constants.ID);
 
-		listBiddingData.get(0).setRate((long)100);
+		listBiddingData.get(0).setRate((long) 100);
 
 		entityManager.persist(listBiddingData.get(0));
 
@@ -194,12 +193,12 @@ public class TestBiddingDao {
 
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
-				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						null, (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61",
-						"load:123", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null)
+				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123",
+						(long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, (long) 20,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", "load:123", null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null)
 //				new BiddingData("id1", null, "AP 32 AD 2226", true, null, (long) 0, null, null, null, null),
 //				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, true, null, (long) 0,
 //						null, null, null, null),
@@ -211,7 +210,7 @@ public class TestBiddingDao {
 //						(long) 0, null, null, (long) 30, null),
 //				new BiddingData("id6", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb68", "Ap32ad221", false, null,
 //						(long) 0, null, null, (long) 40, null)
-				);
+		);
 
 		return biddingList;
 	}

@@ -60,10 +60,11 @@ class TestBiddingController {
 	public void addData() throws Exception {
 
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				"load:123", (long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
-		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success,Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null);
+		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success, Constants.ID,
+				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
+				Arrays.asList("truck:123"), false, true, null);
 
 		when(biddingService.addBid(Mockito.any(BidPostRequest.class))).thenReturn(bidPostResponse);
 
@@ -112,8 +113,7 @@ class TestBiddingController {
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
-		when(biddingService.getBid(0, Constants.LOAD_ID))
-				.thenReturn(listBiddingData.subList(2, 4));
+		when(biddingService.getBid(0, Constants.LOAD_ID,null)).thenReturn(listBiddingData.subList(2, 4));
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(Constants.URI)
 				.queryParam("loadId", Constants.LOAD_ID).queryParam("pageNo", String.valueOf(0))
@@ -136,11 +136,12 @@ class TestBiddingController {
 
 		when(biddingService.getBidById(Constants.ID)).thenReturn(listBiddingData.get(0));
 
-		BidPutRequest bidPutRequest = new BidPutRequest( (long) 1000,BiddingData.UnitValue.PER_TRUCK,
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK,
 				Arrays.asList("truck:abc"), true, false, null);
 
-		BidPutResponse response = new BidPutResponse(Constants.uSuccess   ,Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:123", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), true, false, null);
+		BidPutResponse response = new BidPutResponse(Constants.uSuccess, Constants.ID,
+				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
+				Arrays.asList("truck:123"), true, false, null);
 
 		String inputJson = mapToJson(bidPutRequest);
 
@@ -187,14 +188,14 @@ class TestBiddingController {
 
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
-				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						"load:1234", (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-						null, (long)20, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61",
-						"load:123", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63",
-						"load:123", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123","truck:456"), false, true, null)
+				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:1234",
+						(long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, (long) 20,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", "load:123", null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63", "load:123", null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123", "truck:456"), false, true, null)
 //				new BiddingData("id1", null, "AP 32 AD 2226", true, null, (long) 0, null, null, null, null),
 //				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, true, null, (long) 0,
 //						null, null, null, null),
@@ -206,7 +207,7 @@ class TestBiddingController {
 //						(long) 0, null, null, (long) 30, null),
 //				new BiddingData("id6", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb68", "Ap32ad221", false, null,
 //						(long) 0, null, null, (long) 40, null)
-				);
+		);
 
 		return biddingList;
 	}

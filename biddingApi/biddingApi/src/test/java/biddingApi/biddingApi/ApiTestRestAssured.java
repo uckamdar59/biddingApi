@@ -65,9 +65,9 @@ public class ApiTestRestAssured {
 		pageNo_LoadId = 0;
 		cnt_LoadId = 0;
 		while (true) {
-			 response3 = RestAssured.given().param("pageNo", pageNo_LoadId).param("loadId", "load:123")
-					.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
-					.response();
+			response3 = RestAssured.given().param("pageNo", pageNo_LoadId).param("loadId", "load:123")
+					.header("accept", "application/json").header("Content-Type", "application/json").get().then()
+					.extract().response();
 
 			cnt_LoadId += response3.jsonPath().getList("$").size();
 			if (response3.jsonPath().getList("$").size() != Constants.pageSize)
@@ -129,7 +129,7 @@ public class ApiTestRestAssured {
 //		}
 
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:123", "load:123", (long) 20,
-				BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"),null);
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		String inputJson = mapToJson(bidPostRequest);
 
@@ -137,7 +137,7 @@ public class ApiTestRestAssured {
 				.header("Content-Type", "application/json").post().then().extract().response();
 
 		BidPostRequest bidPostRequest1 = new BidPostRequest("transporterId:123", "load:1234", (long) 20,
-				BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		String inputJson1 = mapToJson(bidPostRequest1);
 
@@ -152,9 +152,6 @@ public class ApiTestRestAssured {
 		assertEquals(Constants.success, response0.jsonPath().getString("status"));
 		id2 = response0.jsonPath().getString("bidId");
 
-		
-		
-		
 	}
 
 	@Test
@@ -162,7 +159,7 @@ public class ApiTestRestAssured {
 	public void addDataFailed_addDataFailed_invalidLoadId_null() throws Exception {
 
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:123", null, (long) 20,
-				BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		String inputJson = mapToJson(bidPostRequest);
 
@@ -200,8 +197,8 @@ public class ApiTestRestAssured {
 	@Order(2)
 	public void addDataFailed_LoadIdAndTransporterIdExists() throws Exception {
 
-		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:123",
-				"load:123", (long) 23, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:123", "load:123", (long) 23,
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 		String inputJson = mapToJson(bidPostRequest);
 
 		Response response = RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
@@ -216,7 +213,7 @@ public class ApiTestRestAssured {
 	@Order(3)
 	public void addDataFailed_invalidRate_null() throws Exception {
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:1345", null, BiddingData.UnitValue.PER_TON, Arrays.asList("truck:123"), null);
+				"load:1345", null, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
 
 		String inputJson = mapToJson(bidPostRequest);
 
@@ -269,18 +266,17 @@ public class ApiTestRestAssured {
 				.header("Content-Type", "application/json").get("/" + id1).then().extract().response();
 
 		assertEquals(200, response.statusCode());
-		assertEquals("transporterId:123",response.jsonPath().getString("transporterId"));
+		assertEquals("transporterId:123", response.jsonPath().getString("transporterId"));
 
 		assertEquals("load:123", response.jsonPath().getString("loadId"));
-		assertEquals(20,  Long.parseLong(response.jsonPath().getString("rate")));
-		assertEquals(String.valueOf(BiddingData.UnitValue.PER_TON), response.jsonPath().getString("unitValue"));
-		assertEquals(String.valueOf(Arrays.asList("truck:123")),response.jsonPath().getString("truckId"));
+		assertEquals(20, Long.parseLong(response.jsonPath().getString("rate")));
+		assertEquals(String.valueOf(BiddingData.Unit.PER_TON), response.jsonPath().getString("unitValue"));
+		assertEquals(String.valueOf(Arrays.asList("truck:123")), response.jsonPath().getString("truckId"));
 		assertEquals(true, Boolean.parseBoolean(response.jsonPath().getString("transporterApproval")));
 		assertEquals(false, Boolean.parseBoolean(response.jsonPath().getString("shipperApproval")));
 //		assertEquals(40, Long.parseLong(response.jsonPath().getString("truckLength")));
 //		assertEquals(String.valueOf(TruckData.TruckType.OPEN_HALF_BODY), response.jsonPath().getString("truckType"));
 
-	
 	}
 
 	@Test
@@ -383,10 +379,9 @@ public class ApiTestRestAssured {
 	@Order(9)
 	public void updateData1() throws Exception {
 
-		BidPutRequest bidPutRequest = new BidPutRequest( (long) 1000, null,
-				null, null, true, null);
-		
-		String inputJson = mapToJson(bidPutRequest); 
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, null, null, null, true, null);
+
+		String inputJson = mapToJson(bidPutRequest);
 
 		Response response = RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").put("/" + id1).then().extract().response();
@@ -454,40 +449,39 @@ public class ApiTestRestAssured {
 	@Test
 	@Order(10)
 	public void updateData2() throws Exception {
-		BidPutRequest bidPutRequest = new BidPutRequest( null, BiddingData.UnitValue.PER_TRUCK,
-				null, null, null, null);
-		
-		String inputJson = mapToJson(bidPutRequest); 
+		BidPutRequest bidPutRequest = new BidPutRequest(null, BiddingData.Unit.PER_TRUCK, null, null, null, null);
+
+		String inputJson = mapToJson(bidPutRequest);
 
 		Response response = RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").put("/" + id1).then().extract().response();
 
 		assertEquals(200, response.statusCode());
 		assertEquals(Constants.uSuccess, response.jsonPath().getString("status"));
-		assertEquals(1000, Long.parseLong(response.jsonPath().getString("rate")));	
-		assertEquals(String.valueOf(BiddingData.UnitValue.PER_TRUCK), response.jsonPath().getString("unitValue"));	
+		assertEquals(1000, Long.parseLong(response.jsonPath().getString("rate")));
+		assertEquals(String.valueOf(BiddingData.Unit.PER_TRUCK), response.jsonPath().getString("unitValue"));
 
-	
 	}
 
 	@Test
 	@Order(11)
 	public void updateData3() throws Exception {
 
-		BidPutRequest bidPutRequest = new BidPutRequest( (long)1000, BiddingData.UnitValue.PER_TRUCK,
-				null, null, null, null);
-		
-		String inputJson = mapToJson(bidPutRequest); 
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK, null, null, null,
+				null);
+
+		String inputJson = mapToJson(bidPutRequest);
 
 		Response response = RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").put("/" + id1).then().extract().response();
 
 		assertEquals(200, response.statusCode());
 		assertEquals(Constants.uSuccess, response.jsonPath().getString("status"));
-		assertEquals(1000, Long.parseLong(response.jsonPath().getString("rate")));	
-		assertEquals(String.valueOf(BiddingData.UnitValue.PER_TRUCK), Long.parseLong(response.jsonPath().getString("unitValue")));	
-		
-		}
+		assertEquals(1000, Long.parseLong(response.jsonPath().getString("rate")));
+		assertEquals(String.valueOf(BiddingData.Unit.PER_TRUCK),
+				Long.parseLong(response.jsonPath().getString("unitValue")));
+
+	}
 
 //	@Test
 //	@Order(12)
@@ -624,8 +618,8 @@ public class ApiTestRestAssured {
 	@Order(18)
 	public void updateDataFailed() throws Exception {
 
-		BidPutRequest bidPutRequest = new BidPutRequest( (long)1000, BiddingData.UnitValue.PER_TRUCK,
-				null, null, null, null);
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK, null, null, null,
+				null);
 
 		String inputJson = mapToJson(bidPutRequest);
 

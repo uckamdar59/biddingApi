@@ -17,29 +17,29 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"transporterId" , "loadId"})})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "transporterId", "loadId" }) })
 @Entity
 public @Data class BiddingData {
 
 	@Id
 	private String bidId;
-	
-	@Column(name="transporterId")
+
+	@Column(name = "transporterId")
 	private String transporterId;
-	@Column(name="loadId")
+	@Column(name = "loadId")
 	private String loadId;
 	private Long rate;
 	@Enumerated(EnumType.STRING)
-	public UnitValue unitValue;
-	
-	public enum UnitValue{
+	public Unit unitValue;
+
+	public enum Unit {
 		PER_TON, PER_TRUCK
 	}
-	
-	@Column(name="truckId")
-	@ElementCollection(targetClass=String.class)
+
+	@Column(name = "truckId")
+	@ElementCollection(targetClass = String.class)
 	private List<String> truckId;
-	
+
 	private Boolean transporterApproval;
 	private Boolean shipperApproval;
 
