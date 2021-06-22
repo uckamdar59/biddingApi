@@ -49,24 +49,9 @@ public class TestBiddingService {
 				Arrays.asList("truck:123"), false, true, null);
 
 		assertEquals(bidPostResponse.getStatus(), biddingService.addBid(bidPostRequest).getStatus());
+		
 
 	}
-
-//	@Test
-//	public void addDataFailed_invalidTransporterId() {
-//
-//		BidPostRequest bidPostRequest = new BidPostRequest(null, "AP 32 AD 2220", null, (long) 0, null, null, null, null);
-//
-//		List<BiddingData> listBiddingData = createBiddingData();
-//
-//		when(biddingDao.save(listBiddingData.get(1))).thenReturn(listBiddingData.get(1));
-//
-//		BidPostResponse response = new BidPostResponse(TruckConstants.IN_CORRECT_TRANSPORTER_ID, null, null,
-//				null, null, null, 0, null, null, null, null);
-//
-//		assertEquals(response, biddingService.addData(bidPostRequest));
-//
-//	}
 
 	@Test
 	public void addDataFailed_invalidLoadId_null() {
@@ -375,7 +360,7 @@ public class TestBiddingService {
 						Arrays.asList("truck:123"), false, true, null),
 				new BiddingData("id5", null, "load:1234", (long) 20, BiddingData.Unit.PER_TON,
 						Arrays.asList("truck:123"), false, true, null)
-
+				
 		);
 
 		return biddingList;

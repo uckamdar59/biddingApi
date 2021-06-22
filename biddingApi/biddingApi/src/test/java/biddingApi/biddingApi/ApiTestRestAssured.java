@@ -133,6 +133,23 @@ public class ApiTestRestAssured {
 	}
 
 	@Test
+	@Order(1)
+	public void addDataFailed_addDataFailed_invalidTransporterId_null() throws Exception {
+
+		BidPostRequest bidPostRequest = new BidPostRequest(null, "load:12345", (long) 20, BiddingData.Unit.PER_TON,
+				Arrays.asList("truck:123"), null);
+
+		String inputJson = mapToJson(bidPostRequest);
+
+		Response response = RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
+				.header("Content-Type", "application/json").post().then().extract().response();
+
+		assertEquals(200, response.statusCode());
+		assertEquals(Constants.TRANSPORTER_ID_NULL, response.jsonPath().getString("status"));
+
+	}
+
+	@Test
 	@Order(2)
 	public void addDataFailed_LoadIdAndTransporterIdExists() throws Exception {
 
@@ -210,7 +227,7 @@ public class ApiTestRestAssured {
 
 	@Test
 	@Order(7)
-	public void getTruckDataWithParam_transporterId() throws Exception {
+	public void getBiddingDataWithParam_transporterId() throws Exception {
 
 		long lastPageCount = cnt_TransporterId % Constants.pageSize;
 		long page = pageNo_TransporterId;
@@ -238,7 +255,7 @@ public class ApiTestRestAssured {
 
 	@Test
 	@Order(8)
-	public void getTruckDataWithParam_LoadId() throws Exception {
+	public void getBiddingDataWithParam_LoadId() throws Exception {
 
 		long lastPageCount = cnt_LoadId % Constants.pageSize;
 		long page = pageNo_LoadId;
@@ -264,7 +281,7 @@ public class ApiTestRestAssured {
 
 	@Test
 	@Order(9)
-	public void getTruckDataWithParam_transporterId_LoadId() throws Exception {
+	public void getBiddingDataWithParam_transporterId_LoadId() throws Exception {
 
 		long lastPageCount = cnt_TransporterId_LoadId % Constants.pageSize;
 		long page = pageNo_transporterId_LoadId;
