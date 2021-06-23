@@ -286,7 +286,7 @@ public class ApiTestRestAssured {
 		long lastPageCount = cnt_TransporterId_LoadId % Constants.pageSize;
 		long page = pageNo_transporterId_LoadId;
 
-		if (lastPageCount >= Constants.pageSize - 1)
+		if (lastPageCount >= Constants.pageSize )
 			page++;
 
 		Response response = RestAssured.given().param("pageNo", page).param("transporterId", "transporterId:123")

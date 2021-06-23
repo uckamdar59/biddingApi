@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,11 +47,16 @@ public class TestBiddingService {
 
 		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success, Constants.ID,
 				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
-				Arrays.asList("truck:123"), false, true, null);
+				Arrays.asList("truck:123"), true, false, null);
 
 		assertEquals(bidPostResponse.getStatus(), biddingService.addBid(bidPostRequest).getStatus());
-		
-
+		assertEquals(bidPostResponse.getTransporterId(), "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69");
+		assertEquals(bidPostResponse.getLoadId(), "load:123");
+		assertEquals(bidPostResponse.getRate(), (long) 20);
+		assertEquals(bidPostResponse.getUnitValue(), BiddingData.Unit.PER_TON);
+		assertEquals(bidPostResponse.getTruckId(), Arrays.asList("truck:123"));
+		assertEquals(bidPostResponse.getTransporterApproval(), true);
+		assertEquals(bidPostResponse.getShipperApproval(), false);
 	}
 
 	@Test
@@ -101,21 +107,6 @@ public class TestBiddingService {
 	}
 
 	@Test
-	public void addDataFailed_invalidUnitValue_null_Rate_null() {
-		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69",
-				"load:1345", null, null, Arrays.asList("truck:123"), null);
-
-		List<BiddingData> listBiddingData = createBiddingData();
-
-		when(biddingDao.save(listBiddingData.get(2))).thenReturn(listBiddingData.get(2));
-
-		BidPostResponse response = new BidPostResponse(Constants.pTransporterRateIsNull, null, null, null, null, null,
-				null, null, null, null);
-
-		assertEquals(response, biddingService.addBid(bidPostRequest));
-	}
-
-	@Test
 	public void addDataFailed_invalidTransporterId_null() {
 		BidPostRequest bidPostRequest = new BidPostRequest(null, "load:123", (long) 20, BiddingData.Unit.PER_TON,
 				Arrays.asList("truck:123"), null);
@@ -138,6 +129,19 @@ public class TestBiddingService {
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
 
 		assertEquals(listBiddingData.get(0), biddingService.getBidById(Constants.ID));
+
+	}
+
+	@Test
+	public void getBiddingDataWithIdFailed() {
+
+		String wrongBidId = "bid:xyz";
+
+		Optional<BiddingData> EmptyList = Optional.empty();
+
+		when(biddingDao.findById(wrongBidId)).thenReturn(EmptyList);
+
+		assertEquals(null, biddingService.getBidById(wrongBidId));
 
 	}
 
@@ -235,8 +239,7 @@ public class TestBiddingService {
 
 		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
 
-		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, null, Arrays.asList("truck:abcdef"), null, true,
-				null);
+		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, null, null, null, true, null);
 
 		BidPutResponse response = new BidPutResponse(Constants.unitValueisNull, null, null, null, null, null, null,
 				null, null, null);
@@ -250,12 +253,10 @@ public class TestBiddingService {
 
 		String wrongBidId = "bid:62cc8557-52cd-4742-a11e-276cc7abcde";
 
-		List<BiddingData> listBiddingData = createBiddingData();
-
-		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
+		when(biddingDao.findById(wrongBidId)).thenReturn(Optional.empty());
 
 		BidPutRequest bidPutRequest = new BidPutRequest((long) 1000, BiddingData.Unit.PER_TRUCK,
-				Arrays.asList("truck:abc"), true, false, wrongBidId);
+				Arrays.asList("truck:abc"), true, false, null);
 
 		BidPutResponse response = new BidPutResponse(Constants.uDataNotExists, null, null, null, null, null, null, null,
 				null, null);
@@ -336,9 +337,9 @@ public class TestBiddingService {
 
 		String wrongBidId = "bid:xyz";
 
-		List<BiddingData> listBiddingData = createBiddingData();
+		Optional<BiddingData> EmptyList = Optional.empty();
 
-		when(biddingDao.findById(Constants.ID)).thenReturn(Optional.ofNullable(listBiddingData.get(0)));
+		when(biddingDao.findById(wrongBidId)).thenReturn(EmptyList);
 
 		BidDeleteResponse response = new BidDeleteResponse(Constants.dDataNotExists);
 
@@ -349,7 +350,7 @@ public class TestBiddingService {
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
 				new BiddingData(Constants.ID, Constants.TRANSPORTER_ID, "load:1234", (long) 20,
-						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), true, false, null),
 				new BiddingData("id1", Constants.TRANSPORTER_ID, null, (long) 20, BiddingData.Unit.PER_TON,
 						Arrays.asList("truck:123"), false, true, null),
 				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", Constants.LOAD_ID, null,
@@ -360,7 +361,7 @@ public class TestBiddingService {
 						Arrays.asList("truck:123"), false, true, null),
 				new BiddingData("id5", null, "load:1234", (long) 20, BiddingData.Unit.PER_TON,
 						Arrays.asList("truck:123"), false, true, null)
-				
+
 		);
 
 		return biddingList;

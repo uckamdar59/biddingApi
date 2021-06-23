@@ -64,7 +64,7 @@ class TestBiddingController {
 
 		BidPostResponse bidPostResponse = new BidPostResponse(Constants.success, Constants.ID,
 				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
-				Arrays.asList("truck:123"), false, true, null);
+				Arrays.asList("truck:123"), true, false, null);
 
 		when(biddingService.addBid(Mockito.any(BidPostRequest.class))).thenReturn(bidPostResponse);
 
@@ -88,7 +88,7 @@ class TestBiddingController {
 	}
 
 	@Test
-	public void getTruckDataWithId() throws Exception {
+	public void getBiddingDataWithId() throws Exception {
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
@@ -113,19 +113,20 @@ class TestBiddingController {
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
-		when(biddingService.getBid(0, Constants.LOAD_ID, null)).thenReturn(listBiddingData.subList(2, 4));
+		when(biddingService.getBid(0, Constants.LOAD_ID, Constants.TRANSPORTER_ID)).thenReturn(listBiddingData.subList(4,5));
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(Constants.URI)
 				.queryParam("loadId", Constants.LOAD_ID).queryParam("pageNo", String.valueOf(0))
-				.accept(MediaType.APPLICATION_JSON);
+				.queryParam("transporterId", Constants.TRANSPORTER_ID).accept(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
 
 		String outputInJson = response.getContentAsString();
-		String expectedJson = mapToJson(listBiddingData.subList(2, 4));
+		String expectedJson = mapToJson(listBiddingData.subList(4,5));
 
 		assertEquals(expectedJson, outputInJson);
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
 
 	}
 
@@ -140,7 +141,7 @@ class TestBiddingController {
 				Arrays.asList("truck:abc"), true, false, null);
 
 		BidPutResponse response = new BidPutResponse(Constants.uSuccess, Constants.ID,
-				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TON,
+				"transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:123", (long) 20, BiddingData.Unit.PER_TRUCK,
 				Arrays.asList("truck:123"), true, false, null);
 
 		String inputJson = mapToJson(bidPutRequest);
@@ -188,14 +189,18 @@ class TestBiddingController {
 
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
-				new BiddingData(Constants.ID, "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", "load:1234",
-						(long) 20, BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id1", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69", null, (long) 20,
+				new BiddingData(Constants.ID, Constants.TRANSPORTER_ID, "load:1234", (long) 20,
 						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", "load:123", null,
+				new BiddingData("id1", Constants.TRANSPORTER_ID, null, (long) 20, BiddingData.Unit.PER_TON,
+						Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb61", Constants.LOAD_ID, null,
 						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
-				new BiddingData("id2", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63", "load:123", null,
-						BiddingData.Unit.PER_TON, Arrays.asList("truck:123", "truck:456"), false, true, null)
+				new BiddingData("id3", "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb63", Constants.LOAD_ID, null,
+						BiddingData.Unit.PER_TON, Arrays.asList("truck:123", "truck:456"), false, true, null),
+				new BiddingData("id4", Constants.TRANSPORTER_ID, Constants.LOAD_ID, (long) 20, BiddingData.Unit.PER_TON,
+						Arrays.asList("truck:123"), false, true, null),
+				new BiddingData("id5", null, "load:1234", (long) 20, BiddingData.Unit.PER_TON,
+						Arrays.asList("truck:123"), false, true, null)
 
 		);
 
