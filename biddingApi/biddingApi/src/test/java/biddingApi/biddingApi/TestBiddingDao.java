@@ -74,7 +74,7 @@ public class TestBiddingDao {
 		BiddingData savedInDb3 = entityManager.persist(listBiddingData.get(3));
 		BiddingData savedInDb4 = entityManager.persist(listBiddingData.get(4));
 		BiddingData savedInDb5 = entityManager.persist(listBiddingData.get(5));
-		
+
 		currentPage = PageRequest.of(0, (int) Constants.pageSize);
 
 		Iterable<BiddingData> allBids = biddingDao.findByLoadId("load:123", currentPage);
@@ -85,7 +85,6 @@ public class TestBiddingDao {
 		}
 		assertThat(list.size()).isEqualTo(4);
 
-		
 		Pageable nextPage = PageRequest.of(1, (int) Constants.pageSize);
 		Iterable<BiddingData> allBidsNextPage = biddingDao.findByLoadId("load:123", nextPage);
 
@@ -120,8 +119,6 @@ public class TestBiddingDao {
 		}
 		assertThat(list.size()).isEqualTo(2);
 
-		
-		
 		Pageable nextPage = PageRequest.of(1, (int) Constants.pageSize);
 		Iterable<BiddingData> allBidsNextPage = biddingDao.findByTransporterId(Constants.TRANSPORTER_ID, nextPage);
 
@@ -131,9 +128,7 @@ public class TestBiddingDao {
 			listNextPage.add(t);
 		}
 		assertThat(listNextPage.size()).isEqualTo(0);
-		
-		
-		
+
 	}
 
 	@Test
@@ -181,9 +176,8 @@ public class TestBiddingDao {
 			list.add(t);
 		}
 		assertThat(list.size()).isEqualTo(1);
-		
+
 		assertThat(list.get(0).getRate()).isEqualTo(100);
-		
 
 	}
 

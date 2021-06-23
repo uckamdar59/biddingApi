@@ -113,7 +113,8 @@ class TestBiddingController {
 
 		List<BiddingData> listBiddingData = createBiddingData();
 
-		when(biddingService.getBid(0, Constants.LOAD_ID, Constants.TRANSPORTER_ID)).thenReturn(listBiddingData.subList(4,5));
+		when(biddingService.getBid(0, Constants.LOAD_ID, Constants.TRANSPORTER_ID))
+				.thenReturn(listBiddingData.subList(4, 5));
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(Constants.URI)
 				.queryParam("loadId", Constants.LOAD_ID).queryParam("pageNo", String.valueOf(0))
@@ -123,7 +124,7 @@ class TestBiddingController {
 		MockHttpServletResponse response = result.getResponse();
 
 		String outputInJson = response.getContentAsString();
-		String expectedJson = mapToJson(listBiddingData.subList(4,5));
+		String expectedJson = mapToJson(listBiddingData.subList(4, 5));
 
 		assertEquals(expectedJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());

@@ -50,13 +50,14 @@ public class TestBiddingService {
 				Arrays.asList("truck:123"), true, false, null);
 
 		assertEquals(bidPostResponse.getStatus(), biddingService.addBid(bidPostRequest).getStatus());
-		assertEquals(bidPostResponse.getTransporterId(), "transporterId:0de885e0-5f43-4c68-8dde-b0f9ff81cb69");
-		assertEquals(bidPostResponse.getLoadId(), "load:123");
-		assertEquals(bidPostResponse.getRate(), (long) 20);
-		assertEquals(bidPostResponse.getUnitValue(), BiddingData.Unit.PER_TON);
-		assertEquals(bidPostResponse.getTruckId(), Arrays.asList("truck:123"));
-		assertEquals(bidPostResponse.getTransporterApproval(), true);
-		assertEquals(bidPostResponse.getShipperApproval(), false);
+		assertEquals(bidPostResponse.getTransporterId(), biddingService.addBid(bidPostRequest).getTransporterId());
+		assertEquals(bidPostResponse.getLoadId(), biddingService.addBid(bidPostRequest).getLoadId());
+		assertEquals(bidPostResponse.getRate(), biddingService.addBid(bidPostRequest).getRate());
+		assertEquals(bidPostResponse.getUnitValue(), biddingService.addBid(bidPostRequest).getUnitValue());
+		assertEquals(bidPostResponse.getTruckId(), biddingService.addBid(bidPostRequest).getTruckId());
+		assertEquals(bidPostResponse.getTransporterApproval(),
+				biddingService.addBid(bidPostRequest).getTransporterApproval());
+		assertEquals(bidPostResponse.getShipperApproval(), biddingService.addBid(bidPostRequest).getShipperApproval());
 	}
 
 	@Test
