@@ -90,7 +90,7 @@ public class ApiTestRestAssured {
 		}
 
 		BidPostRequest bidPostRequest = new BidPostRequest("transporterId:123", "load:123", (long) 20,
-				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), "11/12/2011");
 
 		String inputJson = mapToJson(bidPostRequest);
 
@@ -98,7 +98,7 @@ public class ApiTestRestAssured {
 				.header("Content-Type", "application/json").post().then().extract().response();
 
 		BidPostRequest bidPostRequest1 = new BidPostRequest("transporterId:123", "load:1234", (long) 20,
-				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), null);
+				BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), "11/12/2011");
 
 		String inputJson1 = mapToJson(bidPostRequest1);
 
@@ -108,10 +108,28 @@ public class ApiTestRestAssured {
 		assertEquals(200, response.statusCode());
 		assertEquals(Constants.success, response.jsonPath().getString("status"));
 		id1 = response.jsonPath().getString("bidId");
+		assertEquals(Constants.success, response.jsonPath().getString("status"));
+		assertEquals("transporterId:123", response.jsonPath().getString("transporterId"));
+		assertEquals("load:123", response.jsonPath().getString("loadId"));
+		assertEquals("20", response.jsonPath().getString("rate"));
+		assertEquals(String.valueOf(BiddingData.Unit.PER_TON), response.jsonPath().getString("unitValue"));
+		assertEquals(String.valueOf(Arrays.asList("truck:123")), response.jsonPath().getString("truckId"));
+		assertEquals("true", response.jsonPath().getString("transporterApproval"));
+		assertEquals("false", response.jsonPath().getString("shipperApproval"));
+		assertEquals("11/12/2011", response.jsonPath().getString("biddingDate"));
 
 		assertEquals(200, response0.statusCode());
 		assertEquals(Constants.success, response0.jsonPath().getString("status"));
 		id2 = response0.jsonPath().getString("bidId");
+		assertEquals(Constants.success, response0.jsonPath().getString("status"));
+		assertEquals("transporterId:123", response0.jsonPath().getString("transporterId"));
+		assertEquals("load:1234", response0.jsonPath().getString("loadId"));
+		assertEquals("20", response0.jsonPath().getString("rate"));
+		assertEquals(String.valueOf(BiddingData.Unit.PER_TON), response0.jsonPath().getString("unitValue"));
+		assertEquals(String.valueOf(Arrays.asList("truck:123")), response0.jsonPath().getString("truckId"));
+		assertEquals("true", response0.jsonPath().getString("transporterApproval"));
+		assertEquals("false", response0.jsonPath().getString("shipperApproval"));
+		assertEquals("11/12/2011", response0.jsonPath().getString("biddingDate"));
 
 	}
 
@@ -212,6 +230,7 @@ public class ApiTestRestAssured {
 		assertEquals(String.valueOf(Arrays.asList("truck:123")), response.jsonPath().getString("truckId"));
 		assertEquals(true, Boolean.parseBoolean(response.jsonPath().getString("transporterApproval")));
 		assertEquals(false, Boolean.parseBoolean(response.jsonPath().getString("shipperApproval")));
+		assertEquals("11/12/2011", response.jsonPath().getString("biddingDate"));
 
 	}
 
@@ -406,6 +425,7 @@ public class ApiTestRestAssured {
 		assertEquals(String.valueOf(Arrays.asList("truckID:abcdef")), (response.jsonPath().getString("truckId")));
 		assertEquals("true", (response.jsonPath().getString("transporterApproval")));
 		assertEquals("false", (response.jsonPath().getString("shipperApproval")));
+		assertEquals("11/12/2011", response.jsonPath().getString("biddingDate"));
 
 		System.err.println((response.jsonPath().getString("truckId")));
 
@@ -475,7 +495,8 @@ public class ApiTestRestAssured {
 		assertEquals(String.valueOf(Arrays.asList("truck:123")), (response.jsonPath().getString("truckId")));
 		assertEquals("true", (response.jsonPath().getString("transporterApproval")));
 		assertEquals("true", (response.jsonPath().getString("shipperApproval")));
-		assertEquals(null, response.jsonPath().getString("biddingDate"));
+		assertEquals("11/12/2011", response.jsonPath().getString("biddingDate"));
+
 		assertEquals("load:1234", response.jsonPath().getString("loadId"));
 		assertEquals("transporterId:123", response.jsonPath().getString("transporterId"));
 
