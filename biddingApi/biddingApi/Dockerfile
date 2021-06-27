@@ -1,5 +1,5 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
-EXPOSE 9090
+EXPOSE 8080
 VOLUME /tmp
-ADD target/booking.jar booking.jar
-ENTRYPOINT ["java","-jar","/booking.jar"]
+ADD target/biddingApi-0.0.1-SNAPSHOT.jar bidding.jar
+ENTRYPOINT ["java","-jar","/bidding.jar"]
