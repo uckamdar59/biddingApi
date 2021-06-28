@@ -5,14 +5,19 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
+    
+
+defaults:
+  run:
+    working-directory: ./biddingApi/biddingApi
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
@@ -24,11 +29,11 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       
-    - run: cd ~/actions-runner/deploy/biddingApi/biddingApi
+    - run: cd ~/actions-runner-bid/deploy/biddingApi/biddingApi/biddingApi/biddingApi/
     - run: sudo docker container stop test || true
     - run: sudo docker container stop docker-postgres || true
     - run: sudo docker container prune -f
-    - run: sudo docker image rm bidding
+    - run: sudo docker image rm bidding || true
     - run: sudo docker build -t bidding .
     - run: sudo docker run --name docker-postgres -e POSTGRES_ROOT_PASSWORD=Varun09! -e POSTGRES_DATABASE=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=Varun09! -d postgres:alpine 
-    - run: sudo docker run -p 9090:9090 --name test --link docker-postgres:postgres bidding | echo "success" 
+    - run: sudo docker run -p 8080:8080 --name test --link docker-postgres:postgres bidding | echo "success" 
