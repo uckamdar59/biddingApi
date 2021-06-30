@@ -30,7 +30,7 @@ public class BiddingController {
 	public List<BiddingData> getBid(@RequestParam(value = "pageNo", required = false) Integer pageNo,
 			@RequestParam(value = "loadId", required = false) String loadId,
 			@RequestParam(value = "transporterId", required = false) String transporterId) {
-		return biddingService.getBid(pageNo, loadId,transporterId);
+		return biddingService.getBid(pageNo, loadId, transporterId);
 	}
 
 	@GetMapping("/bid/{Id}")

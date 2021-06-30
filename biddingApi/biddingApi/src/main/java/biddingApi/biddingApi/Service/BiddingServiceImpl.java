@@ -271,7 +271,7 @@ public class BiddingServiceImpl implements BiddingService {
 
 			return response;
 
-		}else if (!String.valueOf(bidPutRequest.getShipperApproval()).equals("null")
+		} else if (!String.valueOf(bidPutRequest.getShipperApproval()).equals("null")
 				&& !String.valueOf(bidPutRequest.getTransporterApproval()).equals("null")) {
 
 			response.setStatus(Constants.TRANSPORTER_SHIPPER_APPROVAL_NOT_NULL);
