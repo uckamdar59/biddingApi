@@ -278,7 +278,49 @@ public class BiddingServiceImpl implements BiddingService {
 
 			return response;
 
+		}else if (String.valueOf(bidPutRequest.getShipperApproval()).equals("false")
+				&& String.valueOf(bidPutRequest.getTransporterApproval()).equals("null")) {
+
+			data.setShipperApproval(false);
+			data.setTransporterApproval(false);
+
+			biddingDao.save(data);
+
+			response.setStatus(Constants.uSuccess);
+			response.setBidId(id);
+			response.setLoadId(data.getLoadId());
+			response.setRate(data.getRate());
+			response.setTransporterId(data.getTransporterId());
+			response.setShipperApproval(data.getShipperApproval());
+			response.setTransporterApproval(data.getTransporterApproval());
+			response.setTruckId(data.getTruckId());
+			response.setUnitValue(data.getUnitValue());
+			response.setBiddingDate(data.getBiddingDate());
+
+			return response;
 		}
+
+		else if (String.valueOf(bidPutRequest.getShipperApproval()).equals("null")
+				&& String.valueOf(bidPutRequest.getTransporterApproval()).equals("false")) {
+
+			data.setShipperApproval(false);
+			data.setTransporterApproval(false);
+			biddingDao.save(data);
+
+			response.setStatus(Constants.uSuccess);
+			response.setBidId(id);
+			response.setLoadId(data.getLoadId());
+			response.setRate(data.getRate());
+			response.setTransporterId(data.getTransporterId());
+			response.setShipperApproval(data.getShipperApproval());
+			response.setTransporterApproval(data.getTransporterApproval());
+			response.setTruckId(data.getTruckId());
+			response.setUnitValue(data.getUnitValue());
+			response.setBiddingDate(data.getBiddingDate());
+
+			return response;
+		}
+
 
 		return response;
 
