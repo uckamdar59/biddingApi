@@ -164,7 +164,7 @@ public class TestBiddingDao {
 		// entityManager.persist(truckData);
 		Optional<BiddingData> getFromDb = biddingDao.findById(Constants.ID);
 
-		listBiddingData.get(0).setRate((long) 100);
+		listBiddingData.get(0).setCurrentBid((long) 100);
 
 		entityManager.persist(listBiddingData.get(0));
 
@@ -177,7 +177,7 @@ public class TestBiddingDao {
 		}
 		assertThat(list.size()).isEqualTo(1);
 
-		assertThat(list.get(0).getRate()).isEqualTo(100);
+		assertThat(list.get(0).getCurrentBid()).isEqualTo(100);
 
 	}
 

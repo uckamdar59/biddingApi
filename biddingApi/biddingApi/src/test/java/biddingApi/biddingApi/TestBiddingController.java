@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -190,7 +191,7 @@ class TestBiddingController {
 
 	public List<BiddingData> createBiddingData() {
 		List<BiddingData> biddingList = Arrays.asList(
-				new BiddingData(Constants.ID, Constants.TRANSPORTER_ID, "load:1234", (long) 20,
+				new BiddingData(Constants.ID, Constants.TRANSPORTER_ID, "load:1234", (long) 20, null,
 						BiddingData.Unit.PER_TON, Arrays.asList("truck:123"), false, true, null),
 				new BiddingData("id1", Constants.TRANSPORTER_ID, null, (long) 20, BiddingData.Unit.PER_TON,
 						Arrays.asList("truck:123"), false, true, null),

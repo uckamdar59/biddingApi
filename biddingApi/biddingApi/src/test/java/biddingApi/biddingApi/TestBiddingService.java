@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +51,7 @@ public class TestBiddingService {
 		assertEquals(bidPostResponse.getStatus(), biddingService.addBid(bidPostRequest).getStatus());
 		assertEquals(bidPostResponse.getTransporterId(), biddingService.addBid(bidPostRequest).getTransporterId());
 		assertEquals(bidPostResponse.getLoadId(), biddingService.addBid(bidPostRequest).getLoadId());
-		assertEquals(bidPostResponse.getRate(), biddingService.addBid(bidPostRequest).getRate());
+		assertEquals(bidPostResponse.getCurrentBid(), biddingService.addBid(bidPostRequest).getCurrentBid());
 		assertEquals(bidPostResponse.getUnitValue(), biddingService.addBid(bidPostRequest).getUnitValue());
 		assertEquals(bidPostResponse.getTruckId(), biddingService.addBid(bidPostRequest).getTruckId());
 		assertEquals(bidPostResponse.getTransporterApproval(),
