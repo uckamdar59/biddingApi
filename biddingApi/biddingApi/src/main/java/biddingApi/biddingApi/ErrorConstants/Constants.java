@@ -21,6 +21,7 @@ public class Constants {
 	public static String unitValueisNull = "Failed: unitValue cannot be null when rate is not Null";
 	public static String TRANSPORTER_ID_NULL = "Failed: TransporterId is null";
 	public static String RATE_NULL = "Failed: Rate is null";
+	public static String UnknownUnit = "Failed: Cannot provide unknown unitValue";
 	public static String TRANSPORTER_SHIPPER_APPROVAL_NULL = "Failed: Atleast one approval is mandatory for updating bid";
 	public static String TRANSPORTER_SHIPPER_APPROVAL_NOT_NULL = "Failed: Can't update bid by both Shipper and Transporter simulataneously";
 
