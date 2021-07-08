@@ -35,7 +35,7 @@ public @Data class BiddingData {
 	@NotNull(message = "Rate can not be null")
 	private Long currentBid;
 
-	private Long pastBid;
+	private Long previousBid;
 
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Unit can not be null")

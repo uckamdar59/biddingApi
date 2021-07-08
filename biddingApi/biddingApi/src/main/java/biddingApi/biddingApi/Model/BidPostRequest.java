@@ -14,7 +14,7 @@ public @Data class BidPostRequest {
 	private String transporterId;
 	private String loadId;
 	private Long currentBid;
-//	private Long pastRate;
+
 	private Unit unitValue;
 	private List<String> truckId;
 	private String biddingDate;
