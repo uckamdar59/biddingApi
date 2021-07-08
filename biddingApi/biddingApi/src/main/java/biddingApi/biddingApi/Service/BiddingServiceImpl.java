@@ -103,11 +103,11 @@ public class BiddingServiceImpl implements BiddingService {
 			pageNo = 0;
 
 		if (loadId != null && transporterId == null) {
-			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
-			list = biddingDao.findByLoadId(loadId, p);
-			Collections.reverse(list);
 
 			try {
+				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+				list = biddingDao.findByLoadId(loadId, p);
+				Collections.reverse(list);
 				log.info("Bidding Data with params returned");
 				return list;
 			} catch (Exception ex) {
@@ -116,10 +116,11 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else if (loadId == null && transporterId != null) {
-			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
-			list = biddingDao.findByTransporterId(transporterId, p);
-			Collections.reverse(list);
+			
 			try {
+				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+				list = biddingDao.findByTransporterId(transporterId, p);
+				Collections.reverse(list);
 				log.info("Bidding Data with params returned");
 				return list;
 			} catch (Exception ex) {
@@ -128,10 +129,11 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else if (loadId != null && transporterId != null) {
-			Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
-			list = biddingDao.findByLoadIdAndTransporterId(loadId, transporterId, p);
-			Collections.reverse(list);
+			
 			try {
+				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+				list = biddingDao.findByLoadIdAndTransporterId(loadId, transporterId, p);
+				Collections.reverse(list);
 				log.info("Bidding Data with params returned");
 				return list;
 			} catch (Exception ex) {
@@ -140,9 +142,10 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else {
-			list = biddingDao.findAll();
-			Collections.reverse(list);
+			
 			try {
+				list = biddingDao.findAll();
+				Collections.reverse(list);
 				log.info("Bidding Data with params returned");
 				return list;
 			} catch (Exception ex) {
@@ -228,7 +231,7 @@ public class BiddingServiceImpl implements BiddingService {
 					throw new BusinessException(Constants.unitValueisNull);
 
 				} else {
-					
+
 					if ("PER_TON".equals(String.valueOf(bidPutRequest.getUnitValue()))) {
 						data.setUnitValue(BiddingData.Unit.PER_TON);
 					} else if (String.valueOf(bidPutRequest.getUnitValue()).equals("PER_TRUCK")) {

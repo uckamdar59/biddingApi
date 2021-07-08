@@ -32,7 +32,7 @@ public @Data class BiddingData {
 	@NotBlank(message = "Load Id can not be null")
 	private String loadId;
 
-	@NotNull(message = "Rate can not be null")
+	@NotNull(message = "Current Bid can not be null")
 	private Long currentBid;
 
 	private Long previousBid;
