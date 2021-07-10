@@ -37,13 +37,13 @@ public class BiddingController {
 			@RequestParam(value = "transporterId", required = false) String transporterId)
 			throws EntityNotFoundException {
 		log.info("Get with Params Controller Started");
-		return new ResponseEntity<>(biddingService.getBid(pageNo, loadId, transporterId), HttpStatus.FOUND);
+		return new ResponseEntity<>(biddingService.getBid(pageNo, loadId, transporterId), HttpStatus.OK);
 	}
 
 	@GetMapping("/bid/{Id}")
 	public ResponseEntity<BiddingData> getBidById(@PathVariable String Id) throws EntityNotFoundException {
 		log.info("Get Controller Started");
-		return new ResponseEntity<>(biddingService.getBidById(Id), HttpStatus.FOUND);
+		return new ResponseEntity<>(biddingService.getBidById(Id), HttpStatus.OK);
 	}
 
 	@PostMapping("/bid")
