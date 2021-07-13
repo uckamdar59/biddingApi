@@ -144,12 +144,13 @@ public class BiddingServiceImpl implements BiddingService {
 		} else {
 			
 			try {
-				list = biddingDao.findAll();
+				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
+				list = biddingDao.getAll(p);
 				Collections.reverse(list);
-				log.info("Bidding Data with params returned");
+				log.info("Bidding Data get all returned");
 				return list;
 			} catch (Exception ex) {
-				log.error("Bidding Data with params not returned -----" + String.valueOf(ex));
+				log.error("Bidding Data get all not returned -----" + String.valueOf(ex));
 				throw ex;
 			}
 
