@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import biddingApi.biddingApi.SecurityConfig.JwtUtil;
+
 import biddingApi.biddingApi.Dao.BiddingDao;
 import biddingApi.biddingApi.Entities.BiddingData;
 import biddingApi.biddingApi.ErrorConstants.Constants;
@@ -29,8 +31,11 @@ public class BiddingServiceImpl implements BiddingService {
 	@Autowired
 	private BiddingDao biddingDao;
 
+	@Autowired
+	private JwtUtil jwtUtil;
+
 	@Override
-	public BidPostResponse addBid(BidPostRequest request) {
+	public BidPostResponse addBid(BidPostRequest request, String token) {
 
 		BiddingData data = new BiddingData();
 		BidPostResponse response = new BidPostResponse();
@@ -64,6 +69,11 @@ public class BiddingServiceImpl implements BiddingService {
 		data.setTransporterApproval(true);
 		data.setShipperApproval(false);
 
+		
+		if (!jwtUtil.extractId(token).equals(data.getTransporterId()))
+			throw new BusinessException("Not accessible through this Id");
+		
+		
 		try {
 			biddingDao.save(data);
 			log.info("Bidding Data is saved");
@@ -116,7 +126,7 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else if (loadId == null && transporterId != null) {
-			
+
 			try {
 				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
 				list = biddingDao.findByTransporterId(transporterId, p);
@@ -129,7 +139,7 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else if (loadId != null && transporterId != null) {
-			
+
 			try {
 				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
 				list = biddingDao.findByLoadIdAndTransporterId(loadId, transporterId, p);
@@ -142,7 +152,7 @@ public class BiddingServiceImpl implements BiddingService {
 			}
 
 		} else {
-			
+
 			try {
 				Pageable p = PageRequest.of(pageNo, (int) Constants.pageSize);
 				list = biddingDao.getAll(p);
@@ -158,18 +168,23 @@ public class BiddingServiceImpl implements BiddingService {
 	}
 
 	@Override
-	public BidDeleteResponse deleteBid(String id) {
+	public BidDeleteResponse deleteBid(String id, String token) {
 
 		BidDeleteResponse response = new BidDeleteResponse();
 
-		Optional<BiddingData> temp = (biddingDao.findById(id));
+		BiddingData data = biddingDao.findById(id).orElse(null);
 
-		if (temp.isEmpty()) {
+		if (data == null) {
 			EntityNotFoundException ex = new EntityNotFoundException(BiddingData.class, "bidId", id.toString());
 			log.error(String.valueOf(ex));
 			throw ex;
+
 		}
 		try {
+
+			if (!jwtUtil.extractId(token).equals(data.getTransporterId()))
+				throw new BusinessException("Not accessible through this Id");
+
 			biddingDao.deleteById(id);
 			log.info("Deleted");
 		} catch (Exception ex) {
@@ -191,18 +206,22 @@ public class BiddingServiceImpl implements BiddingService {
 	}
 
 	@Override
-	public BiddingData getBidById(String id) {
-		Optional<BiddingData> temp = (biddingDao.findById(id));
+	public BiddingData getBidById(String id, String token) {
+		BiddingData data = biddingDao.findById(id).orElse(null);
 
-		if (temp.isEmpty()) {
+		if (data == null) {
 			EntityNotFoundException ex = new EntityNotFoundException(BiddingData.class, "bidId", id.toString());
 			log.error(String.valueOf(ex));
 			throw ex;
-		}
 
+		}
 		try {
+
+			if (!jwtUtil.extractId(token).equals(data.getTransporterId()))
+				throw new BusinessException("Not accessible through this Id");
+
 			log.info("Bidding Data returned");
-			return temp.orElse(null);
+			return data;
 		} catch (Exception ex) {
 			log.error("Bidding Data not returned -----" + String.valueOf(ex));
 			throw ex;
@@ -211,7 +230,7 @@ public class BiddingServiceImpl implements BiddingService {
 	}
 
 	@Override
-	public BidPutResponse updateBid(String id, BidPutRequest bidPutRequest) {
+	public BidPutResponse updateBid(String id, BidPutRequest bidPutRequest,String token) {
 
 		BidPutResponse response = new BidPutResponse();
 		BiddingData data = biddingDao.findById(id).orElse(null);
@@ -223,6 +242,10 @@ public class BiddingServiceImpl implements BiddingService {
 
 		}
 
+		
+		if (!jwtUtil.extractId(token).equals(data.getTransporterId()))
+			throw new BusinessException("Not accessible through this Id");
+		
 		if (String.valueOf(bidPutRequest.getTransporterApproval()).equals("true")
 				&& String.valueOf(bidPutRequest.getShipperApproval()).equals("null")) {
 			if (bidPutRequest.getCurrentBid() != null) {
